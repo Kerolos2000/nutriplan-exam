@@ -8,7 +8,7 @@ export function VideoCard(videoId) {
         <i class="fa-brands fa-youtube text-red-500"></i>
         ${t("videoTutorial")}
       </h3>
-      <div class="aspect-video rounded-xl overflow-hidden bg-black shadow-lg">
+      <div class="aspect-video rounded-xl overflow-hidden bg-black shadow-sm">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>

@@ -10,7 +10,7 @@ export function LogButton(id, label, isLoading = false) {
   }
   return `
     <button id="${id}" 
-      class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 font-bold rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+      class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 font-bold rounded-xl shadow-sm shadow-blue-200 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
       <i class="fa-solid fa-file-pen"></i>
       ${label}
     </button>

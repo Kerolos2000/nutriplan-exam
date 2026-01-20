@@ -10,7 +10,7 @@ export const MealsView = {
 
   noResults() {
     return `
-      <div class="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300 animate-fade-in">
+      <div class="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
           <div class="text-4xl mb-3"><i class="fa-solid fa-utensils text-gray-300"></i></div>
           <p class="text-gray-500">${t("noMealsFound")}</p>
       </div>
@@ -26,12 +26,10 @@ export const MealsView = {
           ? `${data.activeArea}`
           : t("allRecipes");
 
-    const showCategories =
-      data.activeArea === "All" && !data.search && !data.activeCategory;
     const isGrid = data.viewMode === "grid";
 
     return `
-      <div class="space-y-8 animate-fade-in">
+      <div class="space-y-8 ">
         <div id="search-container"></div>
         <div id="area-filters-container">
           ${AreaFilterChips({
@@ -41,7 +39,7 @@ export const MealsView = {
         </div>
         
         <div id="content-area" class="space-y-8">
-          ${showCategories ? this.categoriesSection(data.categories) : ""}
+          ${this.categoriesSection(data.categories)}
           
           <section>
             <div class="flex justify-between items-end mb-4">
@@ -61,7 +59,7 @@ export const MealsView = {
               </div>
             </div>
             
-            ${this.mealsSection(data.meals, data.viewMode)}
+            ${data.loading ? this.loading() : this.mealsSection(data.meals, data.viewMode)}
           </section>
         </div>
       </div>
@@ -98,7 +96,7 @@ export const MealsView = {
       : "grid grid-cols-1 md:grid-cols-2 gap-4";
 
     return `
-      <div class="${gridClass} animate-fade-in">
+      <div class="${gridClass} ">
           ${meals.map((m) => MealCard({ meal: m, viewMode })).join("")}
       </div>
     `;

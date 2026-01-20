@@ -11,7 +11,7 @@ export function AreaFilterChips({ areas, activeArea }) {
               onclick="handleAreaFilterChange('${area}')"
               class="px-5 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
                 activeArea === area
-                  ? "bg-emerald-600 text-white shadow-lg shadow-emerald-200"
+                  ? "bg-emerald-600 text-white shadow-sm shadow-emerald-200"
                   : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
               }">
               ${area === "All" ? t("all") : area}

@@ -22,7 +22,7 @@ export const MealDetailsView = {
   page({ meal, nutrition, videoId }) {
     const ingredients = meal.ingredients;
     return `
-      <div class="space-y-8 animate-fade-in pb-10 max-w-7xl mx-auto">
+      <div class="space-y-8 pb-10 max-w-7xl mx-auto">
         <a href="#/" onclick="event.preventDefault(); navigateTo('/')" class="inline-flex items-center text-gray-600 hover:text-emerald-600 transition-colors gap-2 font-medium">
           <i class="fa-solid fa-arrow-left"></i> ${t("backToRecipes")}
         </a>

@@ -11,7 +11,7 @@ export const ScannerView = {
   noResults(search, lastSearchType) {
     return search
       ? `
-        <div class="text-center py-10 animate-fade-in">
+        <div class="text-center py-10">
             <p class="text-gray-400 text-sm">${t("noProductFoundWith")} ${lastSearchType}: <span class="font-bold text-gray-700">${search}</span></p>
         </div>
       `
@@ -28,10 +28,10 @@ export const ScannerView = {
 
   page(data) {
     return `
-      <div class="space-y-8 animate-fade-in max-w-7xl mx-auto pb-10">
+      <div class="space-y-8  max-w-7xl mx-auto pb-10">
         <div class="bg-teal-600 rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden border-b-4 border-teal-700">
             <div class="flex items-center gap-3 mb-6 relative z-10">
-                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center font-black tracking-tighter text-2xl shrink-0">||||</div>
+                <i class="fa-solid fa-barcode text-2xl"></i>
                 <h2 class="text-2xl font-bold">${t("productSearch")}</h2>
             </div>
             <p class="text-teal-100/80 text-sm mb-6 -mt-4">${t("searchPackaged")}</p>
@@ -41,7 +41,7 @@ export const ScannerView = {
                         class="flex-1 px-6 py-4 rounded-xl text-gray-800 placeholder-gray-400 focus:ring-4 focus:ring-teal-400 focus:outline-none transition-all shadow-inner"
                         placeholder="${t("searchPlaceholder")}"
                         value="${data.search && data.lastSearchType === "query" ? data.search : ""}">
-                    <button id="search-btn" class="bg-white text-teal-700 px-6 md:px-10 py-4 rounded-xl font-bold hover:bg-teal-50 transition-all active:scale-95 shadow-lg">
+                    <button id="search-btn" class="bg-white text-teal-700 px-6 md:px-10 py-4 rounded-xl font-bold hover:bg-teal-50 transition-all active:scale-95 shadow-sm">
                         ${t("searchButton")}
                     </button>
                 </div>
@@ -60,7 +60,7 @@ export const ScannerView = {
                             <i class="fa-solid fa-barcode text-gray-900 text-xl"></i>
                          </div>
                     </div>
-                    <button id="lookup-btn" class="bg-orange-500 text-white px-6 md:px-10 py-4 rounded-xl font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2">
+                    <button id="lookup-btn" class="bg-orange-500 text-white px-6 md:px-10 py-4 rounded-xl font-bold hover:bg-orange-600 transition-all active:scale-95 shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         ${t("lookupButton")}
                     </button>
@@ -86,7 +86,7 @@ export const ScannerView = {
     }
 
     return `
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           ${products.map((p) => ProductCard({ product: p })).join("")}
       </div>
     `;
