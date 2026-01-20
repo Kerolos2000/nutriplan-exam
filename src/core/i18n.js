@@ -118,6 +118,13 @@ const translations = {
     weeklyAverage: "Weekly Average",
     totalItemsThisWeek: "Total Items This Week",
     daysOnGoal: "Days On Goal",
+    numberOfServings: "Number of Servings",
+    estimatedNutritionPerServing: "Estimated nutrition per serving:",
+    cancel: "Cancel",
+    logMeal: "Log Meal",
+    mealLoggedSuccess: "Meal Logged!",
+    mealLoggedMessage: "has been added to your daily log.",
+    caloriesAdded: "calories",
   },
   ar: {
     appName: "نيوتري بلان",
@@ -236,6 +243,13 @@ const translations = {
     weeklyAverage: "المعدل الأسبوعي",
     totalItemsThisWeek: "إجمالي العناصر هذا الأسبوع",
     daysOnGoal: "أيام الالتزام بالهدف",
+    numberOfServings: "عدد الحصص",
+    estimatedNutritionPerServing: "تقدير القيم الغذائية للحصة:",
+    cancel: "إلغاء",
+    logMeal: "سجل الوجبة",
+    mealLoggedSuccess: "تم تسجيل الوجبة!",
+    mealLoggedMessage: "تمت إضافتها لسجلك اليومي.",
+    caloriesAdded: "سعرة حرارية",
   },
 };
 

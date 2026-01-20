@@ -120,7 +120,7 @@ export const FoodLogView = {
               ${log.name}
             </div>
             <div class="text-xs text-gray-500 mt-0.5">
-              ${log.calories} ${t("caloriesShort")} • ${log.protein}${t("grams")} ${t("proteinShort")} • ${log.carbs}${t("grams")} ${t("carbsShort")} • ${log.fat}${t("grams")} ${t("fatShort")}
+              ${log.servings ? `${log.servings} servings • ` : ""} ${log.calories} ${t("caloriesShort")} • ${log.protein}${t("grams")} ${t("proteinShort")} • ${log.carbs}${t("grams")} ${t("carbsShort")} • ${log.fat}${t("grams")} ${t("fatShort")}
             </div>
           </div>
         </div>

@@ -2,7 +2,9 @@ import { BasePage } from "../core/BasePage.js";
 import { DOM } from "../core/DOM.js";
 import { t } from "../core/i18n.js";
 import { LogButton } from "../features/MealDetails/components/LogButton.js";
+import { LogMealModal } from "../features/MealDetails/components/LogMealModal.js";
 import { MealDetailsView } from "../features/MealDetails/components/MealDetailsView.js";
+import { MealLoggedModal } from "../features/MealDetails/components/MealLoggedModal.js";
 import { NutritionCard } from "../features/MealDetails/components/NutritionCard.js";
 import { mealDetailsService } from "../features/MealDetails/services/mealDetailsService.js";
 import { getYoutubeVideoId } from "../features/MealDetails/utils/videoId.js";
@@ -12,6 +14,7 @@ import { todayKey } from "../shared/utils/date.js";
 export class MealDetailsPage extends BasePage {
   meal = null;
   nutrition = null;
+  currentServings = 1;
 
   constructor(id) {
     super();
@@ -110,7 +113,7 @@ export class MealDetailsPage extends BasePage {
     DOM.on(this.container, "click", (e) => {
       const logBtn = e.target.closest("#log-meal-btn");
       if (logBtn && !logBtn.disabled) {
-        this.handleLog(logBtn);
+        this.openLogModal();
         return;
       }
 
@@ -121,42 +124,114 @@ export class MealDetailsPage extends BasePage {
     });
   }
 
-  handleLog(button) {
-    this.addLog();
-    this.showLogSuccess(button);
+  openLogModal() {
+    this.currentServings = 1;
+    const modalHtml = LogMealModal(
+      this.meal,
+      this.currentServings,
+      this.nutrition,
+    );
+
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = modalHtml;
+    this.modalEl = wrapper.firstElementChild;
+    document.body.appendChild(this.modalEl);
+
+    this.bindModalEvents();
+  }
+
+  closeLogModal() {
+    if (this.modalEl) {
+      this.modalEl.remove();
+      this.modalEl = null;
+    }
+  }
+
+  bindModalEvents() {
+    if (!this.modalEl) return;
+
+    const cancelBtn = this.modalEl.querySelector("#cancel-log");
+    const confirmBtn = this.modalEl.querySelector("#confirm-log");
+    const plusBtn = this.modalEl.querySelector("#increase-servings");
+    const minusBtn = this.modalEl.querySelector("#decrease-servings");
+
+    cancelBtn?.addEventListener("click", () => this.closeLogModal());
+    confirmBtn?.addEventListener("click", () => this.confirmLog());
+
+    plusBtn?.addEventListener("click", () => this.updateServings(0.5));
+    minusBtn?.addEventListener("click", () => this.updateServings(-0.5));
+  }
+
+  updateServings(delta) {
+    const newServings = this.currentServings + delta;
+    if (newServings < 0.5) return;
+
+    this.currentServings = newServings;
+
+    const input = this.modalEl.querySelector("#servings-input");
+    if (input) input.value = this.currentServings;
+
+    if (this.nutrition?.data?.perServing) {
+      const p = this.nutrition.data.perServing;
+      const m = (val) => Math.round(Number(val) * this.currentServings);
+
+      const updateText = (id, val, unit = "") => {
+        const el = this.modalEl.querySelector(id);
+        if (el) el.textContent = `${val}${unit}`;
+      };
+
+      updateText("#est-cal", m(p.calories));
+      updateText("#est-prot", m(p.protein), t("grams"));
+      updateText("#est-carbs", m(p.carbs || p.carbohydrates), t("grams"));
+      updateText("#est-fat", m(p.fat), t("grams"));
+    }
+  }
+
+  confirmLog() {
+    const totalCalories = this.addLog();
+    this.closeLogModal();
+    this.showSuccessModal(totalCalories);
   }
 
   addLog() {
     const p = this.nutrition?.data?.perServing ?? {};
     const num = (v) => (Number.isFinite(+v) ? +v : 0);
+    const factor = this.currentServings;
+
+    const totalCalories = Math.round(num(p.calories) * factor);
 
     storageService.addLog({
       name: this.meal.name,
       image: this.meal.thumbnail || this.meal.image || null,
       date: todayKey(),
-      calories: Math.round(num(p.calories)),
-      protein: num(p.protein),
-      carbs: num(p.carbs ?? p.carbohydrates),
-      fat: num(p.fat),
+      calories: totalCalories,
+      protein: Math.round(num(p.protein) * factor),
+      carbs: Math.round(num(p.carbs || p.carbohydrates) * factor),
+      fat: Math.round(num(p.fat) * factor),
+      servings: this.currentServings, // Optional: save servings count if needed later
     });
+
+    return totalCalories;
   }
 
-  showLogSuccess(button) {
-    const original = button.innerHTML;
-
-    button.innerHTML = `
-      <span class="flex items-center gap-2">
-        <i class="fa-solid fa-circle-check"></i>
-        ${t("mealLogged")}
-      </span>
-    `;
-    button.classList.replace("bg-blue-600", "bg-green-600");
-    button.classList.add("shadow-green-200");
+  showSuccessModal(totalCalories) {
+    const modalHtml = MealLoggedModal(
+      this.meal.name,
+      this.currentServings,
+      totalCalories,
+    );
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = modalHtml;
+    const successModalEl = wrapper.firstElementChild;
+    document.body.appendChild(successModalEl);
 
     setTimeout(() => {
-      button.innerHTML = original;
-      button.classList.replace("bg-green-600", "bg-blue-600");
-      button.classList.remove("shadow-green-200");
+      successModalEl.classList.add(
+        "opacity-0",
+        "transition-opacity",
+        "duration-500",
+      );
+      setTimeout(() => successModalEl.remove(), 500);
     }, 2000);
   }
 
